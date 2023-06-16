@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { userContext } from '../Context/ContextComponent';
 
-function AddStudent({ students, setStudents }) {
+
+function AddStudent() {
+  let Context=useContext(userContext)
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -14,25 +17,25 @@ function AddStudent({ students, setStudents }) {
   const [batch, setBatch] = useState('');
 
   useEffect(() => {
-    if (id !== undefined && students[id]) {
-      setName(students[id].name);
-      setEmail(students[id].email);
-      setMobile(students[id].mobile);
-      setCourse(students[id].course);
-      setBatch(students[id].batch);
+    if (id !== undefined && Context.students[id]) {
+      setName(Context.students[id].name);
+      setEmail(Context.students[id].email);
+      setMobile(Context.students[id].mobile);
+      setCourse(Context.students[id].course);
+      setBatch(Context.students[id].batch);
     }
-  }, [id, students]);
+  }, [id, Context.students]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newStudent = { name, email, mobile, course, batch };
-    const updatedStudents = [...students];
+    const updatedStudents = [...Context.students];
     if (id !== undefined && updatedStudents[id]) {
       updatedStudents[id] = newStudent;
     } else {
       updatedStudents.push(newStudent);
     }
-    setStudents(updatedStudents);
+    Context.setStudents(updatedStudents);
     navigate('/studentslist');
   };
 

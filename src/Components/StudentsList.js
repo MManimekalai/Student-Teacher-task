@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import { userContext } from '../Context/ContextComponent';
 
-function StudentsList({ students, setStudents }) {
 
+function StudentsList() {
+  const context = useContext(userContext);
   const navigate = useNavigate();
 
   const handleEdit = (index) => {
@@ -12,9 +14,9 @@ function StudentsList({ students, setStudents }) {
   };
 
   const handleDelete = (index) => {
-    const updatedStudents = [...students];
+    const updatedStudents = [...context.students];
     updatedStudents.splice(index, 1);
-    setStudents(updatedStudents);
+    context.setStudents(updatedStudents);
   };
 
   return (
@@ -31,7 +33,7 @@ function StudentsList({ students, setStudents }) {
           </tr>
         </thead>
         <tbody>
-          {students.map((student, index) => (
+          {context.students.map((student, index) => (
             <tr key={index}>
               <td>{student.name}</td>
               <td>{student.email}</td>

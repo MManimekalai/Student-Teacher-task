@@ -1,20 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { userContext } from '../Context/ContextComponent';
 
-function TeachersList({teachers, setTeachers}) {
-console.log(teachers)
+function TeachersList() {
+let Context=useContext(userContext)
+
 
   const handleDelete = (index) => {
-    const newTeachers = [...teachers];
+    const newTeachers = [...Context.teachers];
     newTeachers.splice(index, 1);
-    setTeachers(newTeachers);
+    Context.setTeachers(newTeachers);
   };
 
   return (
     <>
       <div className="card-container">
-        {teachers.map((teacher, index) => (
+        {Context.teachers.map((teacher, index) => (
           <Card
             className="text-align"
             border="primary"

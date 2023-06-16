@@ -1,41 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { userContext } from '../Context/ContextComponent';
 
-function Dashboard({ students, teachers, setTeachers }) {
+
+function Dashboard() {
+  let Context=useContext(userContext)
+
   const [showModal, setShowModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [selectedStudent, setSelectedStudent] = useState('');
 
   const handleAssignStudent = (teacherId, studentId) => {
-    const updatedTeachers = teachers.map((teacher) => {
+    const updatedTeachers = Context.teachers.map((teacher) => {
       if (teacher.id === teacherId) {
-        const updatedStudents = teacher.students ? [...teacher.students, studentId] : [studentId];
+        const updatedStudents = teacher.students ? [...Context.teachers.students, studentId] : [studentId];
         return {
-          ...teacher,
+          ...Context.teachers,
           students: updatedStudents,
         };
       }
       return teacher;
     });
-    setTeachers(updatedTeachers);
+    Context.setTeachers(updatedTeachers);
     handleCloseModal();
   };
 
   const handleRemoveStudent = (teacherId, studentId) => {
-    const updatedTeachers = teachers.map((teacher) => {
+    const updatedTeachers = Context.teachers.map((teacher) => {
       if (teacher.id === teacherId) {
         const updatedStudents = teacher.students.filter((student) => student !== studentId);
         return {
-          ...teacher,
+          ...Context.teachers,
           students: updatedStudents,
         };
       }
       return teacher;
     });
-    setTeachers(updatedTeachers);
+    Context.setTeachers(updatedTeachers);
   };
 
   const handleCloseModal = () => {
@@ -50,7 +54,7 @@ function Dashboard({ students, teachers, setTeachers }) {
   };
 
   const getAssignedStudentCount = (teacherId) => {
-    const teacher = teachers.find((teacher) => teacher.id === teacherId);
+    const teacher = Context.teachers.find((teacher) => teacher.id === teacherId);
     return teacher && teacher.students ? teacher.students.length : 0;
   };
 
@@ -58,7 +62,7 @@ function Dashboard({ students, teachers, setTeachers }) {
     <>
       <h1>Dashboard</h1>
       <div className="card-container">
-        {teachers.map((teacher) => (
+        {Context.teachers.map((teacher) => (
           <Card
             className="text-align"
             border="primary"
@@ -118,7 +122,7 @@ function Dashboard({ students, teachers, setTeachers }) {
               onChange={(e) => setSelectedStudent(e.target.value)}
             >
               <option value="">-- Select a student --</option>
-              {students.map((student) => (
+              {Context.students.map((student) => (
                 <option value={student.id} key={student.id}>
                   {student.name}
                 </option>
